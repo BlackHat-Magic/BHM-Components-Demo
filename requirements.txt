@@ -1,4 +1,4 @@
-bhm-components @ git+https://github.com/BlackHat-Magic/BHM-Components@18c2e677c29b9ef0d1b56d2f90b90fdecacba33f
+bhm-components @ git+https://github.com/BlackHat-Magic/BHM-Components@19ce9cb687db763c7c649bc380ea08730c64a3a9
 blinker==1.9.0
 click==8.1.8
 Flask==3.1.0
