@@ -1,0 +1,567 @@
+{% extends "master.html" %}
+
+{% block body %}
+{% from "components/accordion.html" import accordion %}
+{% from "components/copy_btn.html" import copy_btn %}
+{% from "components/date_picker.html" import datepicker %}
+{% from "components/dropdown.html" import dropdown, dropdown_item, dropdown_divider, dropdown_submenu, dropdown_heading, dropdown_submenu_item, dropdown_shell %}
+{% from "components/hovercard.html" import hovercard_shell %}
+{% from "components/menubar.html" import menubar_shell %} <!--requires dropdown components too-->
+{% from "components/modal.html" import modal_shell %}
+{% from "components/popover.html" import popover_shell %}
+{% from "components/radio_group.html" import radiogroup %}
+{% from "components/sidebar.html" import sidebar_shell %}
+{% from "components/tabs.html" import tabs_shell %}
+{% from "components/toggle_switch.html" import toggle_switch %}
+<div class="container mt-8">
+    <h1 class="mb-4">BHM-Components</h1>
+
+    <div class="grid grid-cols-3 gap-4 mb-8">
+        <div class="card">
+        <div class="card-header">Accordion</div>
+        <div class="card-body">
+            {{ accordion(accordion_data) }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Banners</div>
+        <div class="card-body flex flex-col">
+            <button class="btn btn-primary mt-4" @click="showBanner('This is an info flash.', type='info')">Info Flash</button>
+            <button class="btn btn-primary mt-4" @click="showBanner('This is a warning flash.', type='warning')">Warning Flash</button>
+            <button class="btn btn-primary mt-4" @click="showBanner('This is an error flash.', type='error')">Error Flash</button>
+            <button class="btn btn-primary mt-4" @click="showBanner('This is an success flash.', type='success')">Success Flash</button>
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Dropdown</div>
+        <div class="card-body">
+            {% set user_trigger %}
+            <button class="btn btn-secondary dropdown-trigger-user" id="user-dropdown-trigger">
+                <svg viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>profile_round [#1342]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -2159.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M100.562548,2016.99998 L87.4381713,2016.99998 C86.7317804,2016.99998 86.2101535,2016.30298 86.4765813,2015.66198 C87.7127655,2012.69798 90.6169306,2010.99998 93.9998492,2010.99998 C97.3837885,2010.99998 100.287954,2012.69798 101.524138,2015.66198 C101.790566,2016.30298 101.268939,2016.99998 100.562548,2016.99998 M89.9166645,2004.99998 C89.9166645,2002.79398 91.7489936,2000.99998 93.9998492,2000.99998 C96.2517256,2000.99998 98.0830339,2002.79398 98.0830339,2004.99998 C98.0830339,2007.20598 96.2517256,2008.99998 93.9998492,2008.99998 C91.7489936,2008.99998 89.9166645,2007.20598 89.9166645,2004.99998 M103.955674,2016.63598 C103.213556,2013.27698 100.892265,2010.79798 97.837022,2009.67298 C99.4560048,2008.39598 100.400241,2006.33098 100.053171,2004.06998 C99.6509769,2001.44698 97.4235996,1999.34798 94.7348224,1999.04198 C91.0232075,1998.61898 87.8750721,2001.44898 87.8750721,2004.99998 C87.8750721,2006.88998 88.7692896,2008.57398 90.1636971,2009.67298 C87.1074334,2010.79798 84.7871636,2013.27698 84.044024,2016.63598 C83.7745338,2017.85698 84.7789973,2018.99998 86.0539717,2018.99998 L101.945727,2018.99998 C103.221722,2018.99998 104.226185,2017.85698 103.955674,2016.63598" id="profile_round-[#1342]"> </path> </g> </g> </g> </g></svg>
+                <span class="user-info" style="min-width: max-content">
+                    <span>John Doe</span>
+                    <span class="username">@johndoe</span>
+                </span>
+                <svg class="chevron-icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+            </button>
+            <style>
+                .dropdown-trigger-user { display: inline-flex; align-items: center; padding: var(--space-2) var(--space-3); gap: var(--space-3); }
+                .dropdown-trigger-user .avatar { width: 32px; height: 32px; border-radius: var(--radius-full); border: 1px solid var(--surface-1); }
+                .dropdown-trigger-user .user-info { display: flex; flex-direction: column; text-align: left; line-height: 1.2; }
+                .dropdown-trigger-user .user-info .username { font-size: 0.75rem; color: var(--text-secondary); }
+                .dropdown-trigger-user .chevron-icon { width: 16px; height: 16px; margin-left: var(--space-2); stroke: currentColor; fill: none; stroke-width: 2; }
+            </style>
+            {% endset %}
+
+            {% set user_menu %}
+                {{ dropdown_heading('My Account') }}
+                {{ dropdown_divider() }}
+                {{ dropdown_item(text='Profile', href='#profile', shortcut='⇧⌘P', icon_svg='<svg viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>profile_round [#1342]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Dribbble-Light-Preview" transform="translate(-140.000000, -2159.000000)" fill="currentColor"> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M100.562548,2016.99998 L87.4381713,2016.99998 C86.7317804,2016.99998 86.2101535,2016.30298 86.4765813,2015.66198 C87.7127655,2012.69798 90.6169306,2010.99998 93.9998492,2010.99998 C97.3837885,2010.99998 100.287954,2012.69798 101.524138,2015.66198 C101.790566,2016.30298 101.268939,2016.99998 100.562548,2016.99998 M89.9166645,2004.99998 C89.9166645,2002.79398 91.7489936,2000.99998 93.9998492,2000.99998 C96.2517256,2000.99998 98.0830339,2002.79398 98.0830339,2004.99998 C98.0830339,2007.20598 96.2517256,2008.99998 93.9998492,2008.99998 C91.7489936,2008.99998 89.9166645,2007.20598 89.9166645,2004.99998 M103.955674,2016.63598 C103.213556,2013.27698 100.892265,2010.79798 97.837022,2009.67298 C99.4560048,2008.39598 100.400241,2006.33098 100.053171,2004.06998 C99.6509769,2001.44698 97.4235996,1999.34798 94.7348224,1999.04198 C91.0232075,1998.61898 87.8750721,2001.44898 87.8750721,2004.99998 C87.8750721,2006.88998 88.7692896,2008.57398 90.1636971,2009.67298 C87.1074334,2010.79798 84.7871636,2013.27698 84.044024,2016.63598 C83.7745338,2017.85698 84.7789973,2018.99998 86.0539717,2018.99998 L101.945727,2018.99998 C103.221722,2018.99998 104.226185,2017.85698 103.955674,2016.63598" id="profile_round-[#1342]"> </path> </g> </g> </g> </g></svg>') }}
+                {{ dropdown_item(text='Billing', href='#billing', shortcut='⌘B', icon_svg='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracurrentColorerCarrier" stroke-linecurrentcap="round" stroke-linejoin="round"></g><g id="SVGRepo_icurrentColoronCarrier"> <path fill-rule="evenodd" currentclip-rule="evenodd" d="M7.09878 1.25004C7.14683 1.25006 7.19559 1.25008 7.24508 1.25008H16.7551C16.8045 1.25008 16.8533 1.25006 16.9014 1.25004C17.9181 1.2496 18.6178 1.24929 19.2072 1.45435C20.3201 1.84161 21.1842 2.73726 21.5547 3.86559L20.8421 4.09954L21.5547 3.86559C21.7507 4.46271 21.7505 5.17254 21.7501 6.22655C21.7501 6.27372 21.7501 6.32158 21.7501 6.37014V20.3743C21.7501 21.8395 20.0231 22.7118 18.8857 21.671C18.8062 21.5983 18.694 21.5983 18.6145 21.671L18.1314 22.1131C17.2032 22.9624 15.7969 22.9624 14.8688 22.1131C14.5138 21.7882 13.9864 21.7882 13.6314 22.1131C12.7032 22.9624 11.2969 22.9624 10.3688 22.1131C10.0138 21.7882 9.48637 21.7882 9.13138 22.1131C8.20319 22.9624 6.79694 22.9624 5.86875 22.1131L5.38566 21.671C5.30618 21.5983 5.19395 21.5983 5.11448 21.671C3.97705 22.7118 2.25007 21.8395 2.25007 20.3743V6.37014C2.25007 6.32158 2.25005 6.27372 2.25003 6.22655C2.24965 5.17255 2.24939 4.46271 2.44545 3.86559C2.81591 2.73726 3.68002 1.84161 4.79298 1.45435C5.3823 1.24929 6.08203 1.2496 7.09878 1.25004ZM7.24508 2.75008C6.024 2.75008 5.6034 2.76057 5.28593 2.87103C4.62655 3.10047 4.09919 3.63728 3.8706 4.3335C3.75951 4.67183 3.75007 5.11796 3.75007 6.37014V20.3743C3.75007 20.4933 3.80999 20.5661 3.88517 20.6009C3.92434 20.619 3.96264 20.6237 3.99456 20.6194C4.0227 20.6156 4.05911 20.6035 4.10185 20.5644C4.75453 19.9671 5.74561 19.9671 6.39828 20.5644L6.88138 21.0065C7.23637 21.3313 7.76377 21.3313 8.11875 21.0065C9.04694 20.1571 10.4532 20.1571 11.3814 21.0065C11.7364 21.3313 12.2638 21.3313 12.6188 21.0065C13.5469 20.1571 14.9532 20.1571 15.8814 21.0065C16.2364 21.3313 16.7638 21.3313 17.1188 21.0065L17.6019 20.5644C18.2545 19.9671 19.2456 19.9671 19.8983 20.5644C19.941 20.6035 19.9774 20.6156 20.0056 20.6194C20.0375 20.6237 20.0758 20.619 20.115 20.6009C20.1901 20.5661 20.2501 20.4934 20.2501 20.3743V6.37014C20.2501 5.11797 20.2406 4.67183 20.1295 4.3335C19.9009 3.63728 19.3736 3.10047 18.7142 2.87103C18.3967 2.76057 17.9761 2.75008 16.7551 2.75008H7.24508ZM14.9996 7.44063C15.3086 7.7165 15.3354 8.19062 15.0595 8.49959L11.4881 12.4996C11.3458 12.659 11.1423 12.7501 10.9286 12.7501C10.715 12.7501 10.5115 12.659 10.3692 12.4996L8.94061 10.8996C8.66474 10.5906 8.69158 10.1165 9.00056 9.84063C9.30953 9.56476 9.78365 9.59159 10.0595 9.90057L10.9286 10.874L13.9406 7.50057C14.2165 7.19159 14.6906 7.16476 14.9996 7.44063ZM6.75007 15.5001C6.75007 15.0859 7.08585 14.7501 7.50007 14.7501H16.5001C16.9143 14.7501 17.2501 15.0859 17.2501 15.5001C17.2501 15.9143 16.9143 16.2501 16.5001 16.2501H7.50007C7.08585 16.2501 6.75007 15.9143 6.75007 15.5001Z" fill="currentColor"></path> </g></svg>') }}
+                {{ dropdown_item(text='Settings', href='#settings', shortcut='⌘S', icon_svg='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracurrentColorerCarrier" stroke-linecurrentcap="round" stroke-linejoin="round"></g><g id="SVGRepo_icurrentColoronCarrier"> <path fill-rule="evenodd" currentclip-rule="evenodd" d="M14.2788 2.15224C13.9085 2 13.439 2 12.5 2C11.561 2 11.0915 2 10.7212 2.15224C10.2274 2.35523 9.83509 2.74458 9.63056 3.23463C9.53719 3.45834 9.50065 3.7185 9.48635 4.09799C9.46534 4.65568 9.17716 5.17189 8.69017 5.45093C8.20318 5.72996 7.60864 5.71954 7.11149 5.45876C6.77318 5.2813 6.52789 5.18262 6.28599 5.15102C5.75609 5.08178 5.22018 5.22429 4.79616 5.5472C4.47814 5.78938 4.24339 6.1929 3.7739 6.99993C3.30441 7.80697 3.06967 8.21048 3.01735 8.60491C2.94758 9.1308 3.09118 9.66266 3.41655 10.0835C3.56506 10.2756 3.77377 10.437 4.0977 10.639C4.57391 10.936 4.88032 11.4419 4.88029 12C4.88026 12.5581 4.57386 13.0639 4.0977 13.3608C3.77372 13.5629 3.56497 13.7244 3.41645 13.9165C3.09108 14.3373 2.94749 14.8691 3.01725 15.395C3.06957 15.7894 3.30432 16.193 3.7738 17C4.24329 17.807 4.47804 18.2106 4.79606 18.4527C5.22008 18.7756 5.75599 18.9181 6.28589 18.8489C6.52778 18.8173 6.77305 18.7186 7.11133 18.5412C7.60852 18.2804 8.2031 18.27 8.69012 18.549C9.17714 18.8281 9.46533 19.3443 9.48635 19.9021C9.50065 20.2815 9.53719 20.5417 9.63056 20.7654C9.83509 21.2554 10.2274 21.6448 10.7212 21.8478C11.0915 22 11.561 22 12.5 22C13.439 22 13.9085 22 14.2788 21.8478C14.7726 21.6448 15.1649 21.2554 15.3694 20.7654C15.4628 20.5417 15.4994 20.2815 15.5137 19.902C15.5347 19.3443 15.8228 18.8281 16.3098 18.549C16.7968 18.2699 17.3914 18.2804 17.8886 18.5412C18.2269 18.7186 18.4721 18.8172 18.714 18.8488C19.2439 18.9181 19.7798 18.7756 20.2038 18.4527C20.5219 18.2105 20.7566 17.807 21.2261 16.9999C21.6956 16.1929 21.9303 15.7894 21.9827 15.395C22.0524 14.8691 21.9088 14.3372 21.5835 13.9164C21.4349 13.7243 21.2262 13.5628 20.9022 13.3608C20.4261 13.0639 20.1197 12.558 20.1197 11.9999C20.1197 11.4418 20.4261 10.9361 20.9022 10.6392C21.2263 10.4371 21.435 10.2757 21.5836 10.0835C21.9089 9.66273 22.0525 9.13087 21.9828 8.60497C21.9304 8.21055 21.6957 7.80703 21.2262 7C20.7567 6.19297 20.522 5.78945 20.2039 5.54727C19.7799 5.22436 19.244 5.08185 18.7141 5.15109C18.4722 5.18269 18.2269 5.28136 17.8887 5.4588C17.3915 5.71959 16.7969 5.73002 16.3099 5.45096C15.8229 5.17191 15.5347 4.65566 15.5136 4.09794C15.4993 3.71848 15.4628 3.45833 15.3694 3.23463C15.1649 2.74458 14.7726 2.35523 14.2788 2.15224ZM12.5 15C14.1695 15 15.5228 13.6569 15.5228 12C15.5228 10.3431 14.1695 9 12.5 9C10.8305 9 9.47716 10.3431 9.47716 12C9.47716 13.6569 10.8305 15 12.5 15Z" fill="currentColor"></path> </g></svg>') }}
+                {{ dropdown_divider() }}
+                {# Submenu Example #}
+                {% set invite_submenu %}
+                    {{ dropdown_item(text='Email', href='#invite-email', icon_svg='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>') }}
+                    {{ dropdown_item(text='Message', href='#invite-message', icon_svg='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M8 11H8.01M12 11H12.01M16 11H16.01M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.0799 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.0799 21 7.2V20Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>') }}
+                    {{ dropdown_divider() }}
+                    {{ dropdown_item(text='More...', href='#invite-more') }}
+                {% endset %}
+                {{ dropdown_submenu_item(text='Invite users', submenu_html=invite_submenu, icon_svg='<svg viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" stroke="currentColor"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>invite_line</title> <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Contact" transform="translate(-864.000000, 0.000000)"> <g id="invite_line" transform="translate(864.000000, 0.000000)"> <path d="M24,0 L24,24 L0,24 L0,0 L24,0 Z M12.5934901,23.257841 L12.5819402,23.2595131 L12.5108777,23.2950439 L12.4918791,23.2987469 L12.4918791,23.2987469 L12.4767152,23.2950439 L12.4056548,23.2595131 C12.3958229,23.2563662 12.3870493,23.2590235 12.3821421,23.2649074 L12.3780323,23.275831 L12.360941,23.7031097 L12.3658947,23.7234994 L12.3769048,23.7357139 L12.4804777,23.8096931 L12.4953491,23.8136134 L12.4953491,23.8136134 L12.5071152,23.8096931 L12.6106902,23.7357139 L12.6232938,23.7196733 L12.6232938,23.7196733 L12.6266527,23.7031097 L12.609561,23.275831 C12.6075724,23.2657013 12.6010112,23.2592993 12.5934901,23.257841 L12.5934901,23.257841 Z M12.8583906,23.1452862 L12.8445485,23.1473072 L12.6598443,23.2396597 L12.6498822,23.2499052 L12.6498822,23.2499052 L12.6471943,23.2611114 L12.6650943,23.6906389 L12.6699349,23.7034178 L12.6699349,23.7034178 L12.678386,23.7104931 L12.8793402,23.8032389 C12.8914285,23.8068999 12.9022333,23.8029875 12.9078286,23.7952264 L12.9118235,23.7811639 L12.8776777,23.1665331 C12.8752882,23.1545897 12.8674102,23.1470016 12.8583906,23.1452862 L12.8583906,23.1452862 Z M12.1430473,23.1473072 C12.1332178,23.1423925 12.1221763,23.1452606 12.1156365,23.1525954 L12.1099173,23.1665331 L12.0757714,23.7811639 C12.0751323,23.7926639 12.0828099,23.8018602 12.0926481,23.8045676 L12.108256,23.8032389 L12.3092106,23.7104931 L12.3186497,23.7024347 L12.3186497,23.7024347 L12.3225043,23.6906389 L12.340401,23.2611114 L12.337245,23.2485176 L12.337245,23.2485176 L12.3277531,23.2396597 L12.1430473,23.1473072 Z" id="MingCute" fill-rule="nonzero"> </path> <path d="M17,3 C18.597725,3 19.903664,4.24892392 19.9949075,5.82372764 L20,6 L20,10.3501 L20.5939,10.0862 C21.2076,9.813435 21.9162954,10.2366962 21.9931452,10.8836127 L22,11 L22,19 C22,20.0543909 21.18415,20.9181678 20.1492661,20.9945144 L20,21 L4,21 C2.94563773,21 2.08183483,20.18415 2.00548573,19.1492661 L2,19 L2,11 C2,10.3284056 2.6746366,9.85267997 3.29700147,10.045194 L3.40614,10.0862 L4,10.3501 L4,6 C4,4.40232321 5.24892392,3.09633941 6.82372764,3.00509271 L7,3 L17,3 Z M20,12.5388 L12.8123,15.7333 C12.2951,15.9631 11.7049,15.9631 11.1877,15.7333 L4,12.5388 L4,19 L20,19 L20,12.5388 Z M17,5 L7,5 C6.44772,5 6,5.44772 6,6 L6,11.239 L12,13.9057 L18,11.239 L18,6 C18,5.44772 17.5523,5 17,5 Z M12,8 C12.5523,8 13,8.44772 13,9 C13,9.51283143 12.613973,9.93550653 12.1166239,9.9932722 L12,10 L10,10 C9.44772,10 9,9.55228 9,9 C9,8.48716857 9.38604429,8.06449347 9.88337975,8.0067278 L10,8 L12,8 Z" id="形状" fill="#09244B"> </path> </g> </g> </g> </g></svg>', submenu_position="") }}
+                {{ dropdown_divider() }}
+                {{ dropdown_item(text='Log out', href='#logout', shortcut='⇧⌘Q', icon_svg='<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor"><g id="SVGRepo_bgCurrentColorarrier" stroke-width="2"></g><g id="SVGRepo_tracerCurrentColorarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCurrentColorarrier"> <path d="M16 16.9998L21 11.9998M21 11.9998L16 6.99982M21 11.9998H9M12 16.9998CurrentColor12 17.2954 12 17.4432 11.989 17.5712CurrentColor11.8748 18.9018 10.8949 19.9967 9.58503 20.2571CurrentColor9.45903 20.2821 9.31202 20.2985 9.01835 20.3311L7.99694 20.4446CurrentColor6.46248 20.6151 5.69521 20.7003 5.08566 20.5053CurrentColor4.27293 20.2452 3.60942 19.6513 3.26118 18.8723CurrentColor3 18.288 3 17.5161 3 15.9721V8.02751CurrentColor3 6.48358 3 5.71162 3.26118 5.12734CurrentColor3.60942 4.3483 4.27293 3.75442 5.08566 3.49435CurrentColor5.69521 3.29929 6.46246 3.38454 7.99694 3.55503L9.01835 3.66852CurrentColor9.31212 3.70117 9.45901 3.71749 9.58503 3.74254CurrentColor10.8949 4.00297 11.8748 5.09786 11.989 6.42843CurrentColor12 6.55645 12 6.70424 12 6.99982" stroke="CurrentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>') }}
+            {% endset %}
+            {{ dropdown_shell(id='user-dropdown', trigger_html=user_trigger, menu_html=user_menu, position_classes='right-0', menu_width='w-64') }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Copy Button</div>
+        <div class="card-body">
+            {{ copy_btn("This is some copied text.") }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Date Picker</div>
+        <div class="card-body">
+            {{ datepicker(
+                name="Event Date",
+                id="Event-Date",
+                label="Event Date",
+                required=True
+            ) }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Dropdown (Simple)</div>
+        <div class="card-body">
+            {% set simple_trigger %}
+                <button class="btn btn-primary" id="actions-dropdown-trigger">Actions</button>
+            {% endset %}
+    
+            {% set simple_menu %}
+                {{ dropdown_item(text='New Tab', href='#new-tab', shortcut='⌘T') }}
+                {{ dropdown_item(text='New Window', href='#new-window', shortcut='⌘N') }}
+                {{ dropdown_item(text='New Private Window', href='#', shortcut='⇧⌘N', disabled=True) }}
+                {{ dropdown_divider() }}
+                {# Checkable/Radio items would need custom HTML + Alpine state here #}
+                {# Example: Raw HTML for a checkable item (state needs adding) #}
+                <div x-data="{ checked: true }" 
+                    @click="checked = !checked; $dispatch('clickaway')" 
+                    class="dropdown-item" 
+                    role="menuitemcheckbox" 
+                    :aria-checked="checked.toString()">
+                    <span class="dropdown-item-check-indicator">
+                        <svg x-show="checked" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"></path></svg>
+                    </span>
+                    <span class="dropdown-item-text">Show Bookmarks Bar</span>
+                    <span class="dropdown-item-shortcut">⌘⇧B</span>
+                </div>
+                <style>.dropdown-item-check-indicator { width: 16px; height: 16px; margin-right: var(--space-3); display: inline-flex; align-items: center; justify-content: center; }</style>
+            {% endset %}
+    
+            {{ dropdown_shell(id='actions-dropdown', trigger_html=simple_trigger, menu_html=simple_menu, position_classes='left-0', menu_width='w-56') }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Hovercard</div>
+        <div class="card-body">
+            <p>
+                Check out the profile for
+                {% set trigger1 %}
+                    <a href="#" class="link font-semibold">@thedevdojo</a> 
+                    {# Add .link style if needed: text-decoration: underline; color: var(--accent); #}
+                {% endset %}
+        
+                {% set card1 %}
+                    <div class="flex items-start gap-4">
+                        <img src="https://via.placeholder.com/56" alt="DevDojo Avatar" class="avatar flex-shrink-0">
+                        <div>
+                            <p class="font-bold mb-1">The Dev Dojo</p>
+                            <p class="text-sm text-secondary mb-2">The creative platform for developers. Community, tools, products, and more.</p>
+                            <p class="text-xs text-secondary flex items-center gap-1">
+                                <svg viewBox="0 0 24 24" class="icon-xs"><path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"></path></svg>
+                                <span>Joined June 2020</span>
+                            </p>
+                        </div>
+                    </div>
+                    {# Add basic styles for this card content #}
+                    <style>
+                        .avatar { width: 56px; height: 56px; border-radius: var(--radius-full); }
+                        .text-secondary { color: var(--text-secondary); }
+                        .icon-xs { width: 1em; height: 1em; stroke: currentColor; stroke-width: 1.5; fill: none; }
+                    </style>
+                {% endset %}
+        
+                {{ hovercard_shell(
+                    id='devdojo-profile', 
+                    trigger_html=trigger1, 
+                    card_html=card1,
+                    position_classes='hovercard-bottom-center',
+                    card_width='w-96'
+                ) }}
+                for cool developer resources
+            </p>
+            <p class="mt-8">
+                Or hover over this button:
+                {% set trigger2 %}
+                    <button class="btn btn-secondary">Info</button>
+                {% endset %}
+        
+                {% set card2 %}
+                    <h4 class="font-semibold mb-2">Additional Information</h4>
+                    <p class="text-sm text-secondary">This card appears when you hover over the button trigger element.</p>
+                {% endset %}
+        
+                {{ hovercard_shell(
+                    id='button-info', 
+                    trigger_html=trigger2, 
+                    card_html=card2,
+                    position_classes='hovercard-top-center',
+                    card_width='w-64',
+                    enter_delay=300,
+                    leave_delay=100
+                   ) }}
+            </p>
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Menubar</div>
+        <div class="card-body">
+            {% set file_menu_content %}
+                {{ dropdown_item(text='New Tab', shortcut='⌘T', onclick="console.log('New Tab')") }}
+                {{ dropdown_item(text='New Window', shortcut='⌘N', onclick="console.log('New Window')") }}
+                {{ dropdown_item(text='New Incognito Window', disabled=True) }}
+                {{ dropdown_divider() }}
+                {# Submenu Example #}
+                {% set share_submenu %}
+                    {{ dropdown_item(text='Email link', onclick="console.log('Share Email')") }}
+                    {{ dropdown_item(text='Messages', onclick="console.log('Share Message')") }}
+                    {{ dropdown_item(text='Notes', onclick="console.log('Share Note')") }}
+                {% endset %}
+                {{ dropdown_submenu_item(text='Share', submenu_html=share_submenu) }}
+                {{ dropdown_divider() }}
+                {{ dropdown_item(text='Print', shortcut='⌘P', onclick="console.log('Print')") }}
+            {% endset %}
+
+            {% set edit_menu_content %}
+                {{ dropdown_item(text='Undo', shortcut='⌘Z') }}
+                {{ dropdown_item(text='Redo', shortcut='⇧⌘Z') }}
+                {{ dropdown_divider() }}
+                {{ dropdown_item(text='Cut') }}
+                {{ dropdown_item(text='Copy') }}
+                {{ dropdown_item(text='Paste') }}
+            {% endset %}
+
+            {% set view_menu_content %}
+                {# Stateful item example (requires its own x-data) #}
+                <div x-data="{ alwaysShowBookmarks: false }" 
+                    @click="alwaysShowBookmarks = !alwaysShowBookmarks; $dispatch('clickaway')" 
+                    class="dropdown-item relative pl-8" 
+                    role="menuitemcheckbox" 
+                    :aria-checked="alwaysShowBookmarks.toString()">
+                    <span x-show="alwaysShowBookmarks" class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"></path></svg>
+                    </span>
+                    <span class="dropdown-item-text">Always Show Bookmarks Bar</span>
+                </div>
+                <div x-data="{ alwaysShowFullURL: true }" 
+                    @click="alwaysShowFullURL = !alwaysShowFullURL; $dispatch('clickaway')" 
+                    class="dropdown-item relative pl-8" 
+                    role="menuitemcheckbox" 
+                    :aria-checked="alwaysShowFullURL.toString()">
+                    <span x-show="alwaysShowFullURL" class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                        <svg viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4"><path d="M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z"></path></svg>
+                    </span>
+                    <span class="dropdown-item-text">Always Show Full URLs</span>
+                </div>
+                {{ dropdown_divider() }}
+                {{ dropdown_item(text='Reload', shortcut='⌘R') }}
+                {{ dropdown_item(text='Force Reload', shortcut='⇧⌘R', disabled=True) }}
+            {% endset %}
+
+            {% set main_menus = [
+                { 'name': 'file', 'label': 'File', 'content_html': file_menu_content, 'menu_width': 'w-64' },
+                { 'name': 'edit', 'label': 'Edit', 'content_html': edit_menu_content },
+                { 'name': 'view', 'label': 'View', 'content_html': view_menu_content, 'menu_width': 'w-64' }
+            ] %}
+            
+            {{ menubar_shell(id='main-menu', menus=main_menus) }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Modal</div>
+        <div class="card-body">
+            {% set trigger1 %}
+            <button class="btn btn-primary">Open Simple Modal</button>
+            {% endset %}
+
+            {% set content1 %}
+                <p>This is the main content area of the modal. You can put any HTML structure you need in here.</p>
+                <p>It uses the default 'dark' overlay and 'bordered' panel style.</p>
+            {% endset %}
+
+            {{ modal_shell(
+                id='info-modal', 
+                trigger_html=trigger1, 
+                title='Information', 
+                content_html=content1
+            ) 
+            }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Popover</div>
+        <div class="card-body">
+            {% set trigger1 %}
+                <button class="btn btn-icon btn-secondary" aria-label="Settings"> {# Example icon button #}
+                    <span>Form Popover</span>
+                </button>
+                {# Add .btn-icon style if needed: padding: var(--space-2); width: auto; #}
+            {% endset %}
+
+            {% set content1 %}
+                <h4>Dimensions</h4>
+                <p>Set the dimensions for the layer.</p>
+                <div class="grid gap-2">
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label class="form-label mb-0" for="{{ id }}-width">Width</label>
+                        <input class="form-input col-span-2" id="{{ id }}-width" value="100%">
+                    </div>
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label class="form-label mb-0" for="{{ id }}-maxWidth">Max. width</label>
+                        <input class="form-input col-span-2" id="{{ id }}-maxWidth" value="300px">
+                    </div>
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label class="form-label mb-0" for="{{ id }}-height">Height</label>
+                        <input class="form-input col-span-2" id="{{ id }}-height" value="25px">
+                    </div>
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <label class="form-label mb-0" for="{{ id }}-maxHeight">Max. height</label>
+                        <input class="form-input col-span-2" id="{{ id }}-maxHeight" value="none">
+                    </div>
+                </div>
+            {% endset %}
+
+            {{ popover_shell(
+                id='settings-popover', 
+                trigger_html=trigger1, 
+                content_html=content1,
+                popover_width='w-80'
+            ) 
+            }}
+
+            {% set trigger2 %}
+                <button class="btn btn-outline">Info Popover</button> {# Example style #}
+                {# Add .btn-outline style if needed #}
+            {% endset %}
+
+            {% set content2 %}
+                <h4>Information</h4>
+                <p>This popover has no arrow and prefers to open above the trigger.</p>
+                <button class="btn btn-sm btn-primary" @click="close()">Close Me</button> {# Button inside popover #}
+            {% endset %}
+
+            {{ popover_shell(
+                id='info-popover', 
+                trigger_html=trigger2, 
+                content_html=content2,
+                show_arrow=False,
+                initial_position='top',
+                popover_width='w-64'
+            ) 
+            }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Radio Group</div>
+        <div class="card-body">
+            {% set tech_options = [
+                {
+                    'title': 'Alpine.js',
+                    'description': 'A rugged, minimal framework for composing behavior directly in your markup.',
+                    'value': 'alpine'
+                },
+                {
+                    'title': 'HTMX',
+                    'description': 'High power tools for HTML, enabling AJAX, CSS Transitions, WebSockets and more.',
+                    'value': 'htmx'
+                },
+                {
+                    'title': 'Flask',
+                    'description': 'A lightweight WSGI web application framework in Python.',
+                    'value': 'flask'
+                },
+                {
+                    'title': 'Vanilla CSS',
+                    'description': 'Cascading was <em>not</em> a mistake.',
+                    'value': 'css',
+                }
+            ] %}
+
+            {{ radiogroup(
+                name='tech_preference', 
+                id_prefix='tech-pref', 
+                options=tech_options,
+                label='Select your favorite technology:',
+                initial_value='htmx',
+                required=True
+               ) 
+            }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Sidebar (Right)</div>
+        <div class="card-body">
+            {% set trigger1 %}
+                <button class="btn btn-primary">Open Settings</button>
+            {% endset %}
+
+            {% set content1 %}
+                <p class="mb-4">Configure your application settings here.</p>
+                <div class="form-group">
+                    <label class="form-label" for="setting1">Setting One</label>
+                    <input type="text" id="setting1" class="form-input" value="Default Value">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="setting2">Another Setting</label>
+                    <select id="setting2" class="form-select">
+                        <option>Option A</option>
+                        <option>Option B</option>
+                        <option>Option C</option>
+                    </select>
+                </div>
+                <p>Some more descriptive text about the settings can go here.</p>
+            {% endset %}
+
+            {{ sidebar_shell(
+                id='settings-sidebar', 
+                trigger_html=trigger1, 
+                title='Application Settings', 
+                content_html=content1
+            ) 
+            }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Sidebar (Left)</div>
+        <div class="card-body">
+            {% set trigger2 %}
+                <button class="btn btn-secondary">View Details</button>
+            {% endset %}
+
+            {% set content2 %}
+                <h4 class="font-semibold text-lg mb-2 text-primary">Item Details</h4>
+                <p>This sidebar slides in from the left and is larger.</p>
+                <p>It uses a light overlay style.</p>
+                <hr class="my-4 border-surface-0">
+                <h5 class="font-medium mb-2 text-primary">More Information</h5>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                {# Add enough content to test scrolling #}
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+                <p>Lorem ipsum dolor sit amet...</p>
+            {% endset %}
+
+            {{ sidebar_shell(
+                id='details-sidebar', 
+                trigger_html=trigger2, 
+                title='Details View', 
+                content_html=content2,
+                position='left',
+                size='lg',
+                overlay_style='light'
+            ) 
+            }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Tabs (Horizontal)</div>
+        <div class="card-body">
+            {% set account_content %}
+            <div class="space-y-2">
+                <h3 class="font-semibold">Account Settings</h3>
+                <p class="text-sm text-secondary">Make changes to your account here.</p>
+                <div class="form-group">
+                    <label class="form-label" for="name">Name</label>
+                    <input type="text" id="name" class="form-input" value="Adam Wathan">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" id="username" class="form-input" value="@adamwathan">
+                </div>
+                <button class="btn btn-primary mt-2">Save Changes</button>
+                </div>
+            {% endset %}
+
+            {% set password_content %}
+            <div class="space-y-2">
+                <h3 class="font-semibold">Password Settings</h3>
+                <p class="text-sm text-secondary">Change your password here.</p>
+                <div class="form-group">
+                    <label class="form-label" for="current-pw">Current Password</label>
+                    <input type="password" id="current-pw" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="new-pw">New Password</label>
+                    <input type="password" id="new-pw" class="form-input">
+                </div>
+                <button class="btn btn-primary mt-2">Save Password</button>
+            </div>
+            {% endset %}
+
+            {% set tabs_list = [
+                { 'title': 'Account', 'content_html': account_content },
+                { 'title': 'Password', 'content_html': password_content }
+            ] %}
+
+            {{ tabs_shell(id='settings-tabs', tabs_data=tabs_list, style='underline') }}
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Tabs (Vertical)</div>
+        <div class="card-body">
+            {% set tab1_content %} <p>Content for the first vertical tab.</p> {% endset %}
+            {% set tab2_content %} <p>Content for the second vertical tab. It might be longer.</p> {% endset %}
+            {% set tab3_content %} <p>Content for the third vertical tab.</p> {% endset %}
+        
+            {% set vertical_tabs = [
+                { 'title': 'Details', 'content_html': tab1_content },
+                { 'title': 'History', 'content_html': tab2_content },
+                { 'title': 'Settings', 'content_html': tab3_content }
+            ] %}
+        
+            <div class="max-w-xl"> {# Example container #}
+                {{ tabs_shell(
+                    id='vertical-tabs', 
+                    tabs_data=vertical_tabs, 
+                    orientation='vertical', 
+                    style='underline',
+                    initial_tab_index=1
+                    ) 
+                }}
+            </div>
+        </div>
+        </div>
+        
+        <div class="card">
+        <div class="card-header">Toggle Switch</div>
+        <div class="card-body">
+            <div class="card-body space-y-4">
+                
+                {{ toggle_switch(
+                    name='notifications_enabled', 
+                    id='notifications-switch', 
+                    label='Enable Email Notifications',
+                    initial_checked=True,
+                    value='yes'
+                   ) 
+                }}
+
+                {{ toggle_switch(
+                    name='dark_mode_pref', 
+                    id='dark-mode-switch', 
+                    label='Prefer Dark Mode',
+                    initial_checked=False
+                   ) 
+                }}
+
+                 {{ toggle_switch(
+                    name='analytics_opt_in', 
+                    id='analytics-switch', 
+                    label='Allow Usage Analytics (Required)',
+                    required=True
+                   ) 
+                }}
+
+            </div>
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

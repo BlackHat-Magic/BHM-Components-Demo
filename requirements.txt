@@ -1,0 +1,8 @@
+bhm-components @ git+https://github.com/BlackHat-Magic/BHM-Components@18c2e677c29b9ef0d1b56d2f90b90fdecacba33f
+blinker==1.9.0
+click==8.1.8
+Flask==3.1.0
+itsdangerous==2.2.0
+Jinja2==3.1.6
+MarkupSafe==3.0.2
+Werkzeug==3.1.3
