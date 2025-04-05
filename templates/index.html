@@ -501,32 +501,6 @@
         </div>
         
         <div class="card">
-        <div class="card-header">Tabs (Vertical)</div>
-        <div class="card-body">
-            {% set tab1_content %} <p>Content for the first vertical tab.</p> {% endset %}
-            {% set tab2_content %} <p>Content for the second vertical tab. It might be longer.</p> {% endset %}
-            {% set tab3_content %} <p>Content for the third vertical tab.</p> {% endset %}
-        
-            {% set vertical_tabs = [
-                { 'title': 'Details', 'content_html': tab1_content },
-                { 'title': 'History', 'content_html': tab2_content },
-                { 'title': 'Settings', 'content_html': tab3_content }
-            ] %}
-        
-            <div class="max-w-xl"> {# Example container #}
-                {{ tabs_shell(
-                    id='vertical-tabs', 
-                    tabs_data=vertical_tabs, 
-                    orientation='vertical', 
-                    style='underline',
-                    initial_tab_index=1
-                    ) 
-                }}
-            </div>
-        </div>
-        </div>
-        
-        <div class="card">
         <div class="card-header">Toggle Switch</div>
         <div class="card-body">
             <div class="card-body space-y-4">
@@ -559,6 +533,32 @@
             </div>
             <div class="card-footer">
                 <button type="submit" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+        </div>
+        
+        <div class="card" style="grid-column: span 2">
+        <div class="card-header">Tabs (Vertical)</div>
+        <div class="card-body">
+            {% set tab1_content %} <p>Content for the first vertical tab.</p><p>Don't make it too narrow or else the tabs get cut off lol.</p> {% endset %}
+            {% set tab2_content %} <p>Content for the second vertical tab. It might be longer.</p><p>Don't make it too narrow or else the tabs get cut off lol.</p> {% endset %}
+            {% set tab3_content %} <p>Content for the third vertical tab.</p><p>Don't make it too narrow or else the tabs get cut off lol.</p> {% endset %}
+        
+            {% set vertical_tabs = [
+                { 'title': 'Details', 'content_html': tab1_content },
+                { 'title': 'History', 'content_html': tab2_content },
+                { 'title': 'Settings', 'content_html': tab3_content }
+            ] %}
+        
+            <div class="max-w-xl"> {# Example container #}
+                {{ tabs_shell(
+                    id='vertical-tabs', 
+                    tabs_data=vertical_tabs, 
+                    orientation='vertical', 
+                    style='underline',
+                    initial_tab_index=1
+                    ) 
+                }}
             </div>
         </div>
         </div>

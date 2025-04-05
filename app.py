@@ -108,6 +108,7 @@ def radio_group():
 def select():
     if(request.method == "POST"):
         return(redirect(url_for("select")))
+    return("Incomplete")
     return(render_template("select-demo.html"))
 
 @app.route("/Sidebar")
